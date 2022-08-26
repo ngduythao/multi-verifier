@@ -8,8 +8,9 @@ import { SignatureVerifier } from "./SignatureVerifier.sol";
 import { TokenRecover } from "./TokenRecover.sol";
 
 contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecover, ReentrancyGuard {
-    // fallback() external payable {}
     mapping(bytes32 => bool) private _isClaimed;
+
+    fallback() external payable {}
 
     constructor() {
         _configAffiliate(0xC8d124633A540d6FeD2fBFacfAc4792B08749413, 300);
