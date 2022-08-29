@@ -10,7 +10,7 @@ import { TokenRecover } from "./TokenRecover.sol";
 contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecover, ReentrancyGuard {
     mapping(bytes32 => bool) private _hasClaimed;
 
-    fallback() external payable {}
+    receive() external payable {}
 
     constructor() {
         _configAffiliate(0x64470E5F5DD38e497194BbcAF8Daa7CA578926F6, 300); // 3%
