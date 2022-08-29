@@ -13,7 +13,7 @@ contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecov
     fallback() external payable {}
 
     constructor() {
-        _configAffiliate(0x64470E5F5DD38e497194BbcAF8Daa7CA578926F6, 123); // 3%
+        _configAffiliate(0x64470E5F5DD38e497194BbcAF8Daa7CA578926F6, 300); // 3%
     }
 
     function claim(
@@ -32,10 +32,13 @@ contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecov
         _hasClaimed[submissionId] = true;
         _submit(submissionId, deadline_, signatures_);
 
-        for (uint256 i = 0; i < length; i++) {
+        for (uint256 i = 0; i < length; ) {
             uint256 affiliateAmount = (amounts_[i] * _affiliatePercent) / _maxPercent;
             __transfer(_affiliateAddress, tokens_[i], affiliateAmount);
             __transfer(sender, tokens_[i], amounts_[i] - affiliateAmount);
+            unchecked {
+                ++i;
+            }
         }
 
         emit Claim(sender, submissionId);

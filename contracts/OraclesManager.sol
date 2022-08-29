@@ -60,6 +60,10 @@ contract OraclesManager is Ownable, IOraclesManager {
 
     /* ========== VIEW ========== */
 
+    function threshHold() external view returns (uint8) {
+        return _threshHold;
+    }
+
     function isValidOracle(address oracle) external view override returns (bool) {
         return _isValidOracle(oracle);
     }
