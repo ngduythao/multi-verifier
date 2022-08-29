@@ -69,7 +69,7 @@ contract OraclesManager is Ownable, IOraclesManager {
     }
 
     function viewCountOracles() external view override returns (uint256) {
-        return _oracleAddresses.length();
+        return _viewCountOracles();
     }
 
     function viewOracles(uint256 cursor, uint256 size) external view override returns (address[] memory, uint256) {
@@ -89,6 +89,10 @@ contract OraclesManager is Ownable, IOraclesManager {
         }
 
         return (oracleAddresses, cursor + length);
+    }
+
+    function _viewCountOracles() internal view returns (uint256) {
+        return _oracleAddresses.length();
     }
 
     function _isValidOracle(address oracle) internal view returns (bool) {

@@ -40,7 +40,7 @@ contract SignatureVerifier is OraclesManager, ISignatureVerifier {
 
         if (length < needConfirmations) revert NotEnoughOracles();
 
-        address[] memory oracles = new address[](needConfirmations);
+        address[] memory oracles = new address[](_viewCountOracles() + 1); // reserve index 0 for invalid signer
 
         for (uint256 i = 0; i < length; ) {
             address signer = _getSigner(submissionId_, deadline_, signatures_[i]);
