@@ -1,19 +1,19 @@
-// SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import { ReentrancyGuard } from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import { IClaimRewards } from "./interfaces/IClaimRewards.sol";
 import { Affiliate } from "./Affiliate.sol";
 import { SignatureVerifier } from "./SignatureVerifier.sol";
 import { TokenRecover } from "./TokenRecover.sol";
 
-contract MultiVerifier is IClaimRewards, Affiliate, SignatureVerifier, TokenRecover, ReentrancyGuard {
-    mapping(bytes32 => bool) private _isClaimed;
+contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecover, ReentrancyGuard {
+    mapping(bytes32 => bool) private _hasClaimed;
 
     fallback() external payable {}
 
     constructor() {
-        _configAffiliate(0xC8d124633A540d6FeD2fBFacfAc4792B08749413, 300); // 3%
+        _configAffiliate(0x64470E5F5DD38e497194BbcAF8Daa7CA578926F6, 123); // 3%
     }
 
     function claim(
@@ -27,9 +27,9 @@ contract MultiVerifier is IClaimRewards, Affiliate, SignatureVerifier, TokenReco
         bytes32 submissionId = keccak256(abi.encodePacked(sender, tokens_, amounts_, deadline_));
 
         if (length != amounts_.length) revert LengthMismatch();
-        if (_isClaimed[submissionId]) revert DoubleSpending();
+        if (_hasClaimed[submissionId]) revert DoubleSpending();
 
-        _isClaimed[submissionId] = true;
+        _hasClaimed[submissionId] = true;
         _submit(submissionId, deadline_, signatures_);
 
         for (uint256 i = 0; i < length; i++) {
@@ -41,7 +41,7 @@ contract MultiVerifier is IClaimRewards, Affiliate, SignatureVerifier, TokenReco
         emit Claim(sender, submissionId);
     }
 
-    function isClaim(bytes32 submissionId_) external view returns (bool) {
-        return _isClaimed[submissionId_];
+    function hasClaim(bytes32 submissionId_) external view returns (bool) {
+        return _hasClaimed[submissionId_];
     }
 }

@@ -1,1 +1,1 @@
-import "./multiverifier";
+import "./claim-rewards";
