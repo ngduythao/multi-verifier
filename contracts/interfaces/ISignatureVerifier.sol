@@ -11,7 +11,7 @@ interface ISignatureVerifier {
 
     /* ========== ERRORS ========== */
     error NotEnoughOracles();
-    error NotValidOracle();
+    error InvalidOracle();
     error ExpiredSignature();
     error ReplaySignature();
     error DuplicateSignatures();

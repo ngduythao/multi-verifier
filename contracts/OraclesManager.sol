@@ -3,7 +3,7 @@
 pragma solidity ^0.8.16;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import { EnumerableSet } from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import { EnumerableSet } from "./libraries/EnumerableSet.sol";
 import { IOraclesManager } from "./interfaces/IOraclesManager.sol";
 
 /// @dev The base contract for oracles management. Allows adding/removing oracles,
@@ -75,19 +75,23 @@ contract OraclesManager is Ownable, IOraclesManager {
             length = _oracleAddresses.length() - cursor;
         }
 
-        address[] memory whitelistedStrategies = new address[](length);
+        address[] memory oracleAddresses = new address[](length);
 
         for (uint256 i = 0; i < length; ) {
-            whitelistedStrategies[i] = _oracleAddresses.at(cursor + i);
+            oracleAddresses[i] = _oracleAddresses.at(cursor + i);
             unchecked {
                 ++i;
             }
         }
 
-        return (whitelistedStrategies, cursor + length);
+        return (oracleAddresses, cursor + length);
     }
 
     function _isValidOracle(address oracle) internal view returns (bool) {
         return _oracleAddresses.contains(oracle);
+    }
+
+    function _indexOf(address oracle) internal view returns (uint256) {
+        return _oracleAddresses.indexOf(oracle);
     }
 }

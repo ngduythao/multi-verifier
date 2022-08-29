@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.16;
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "./OraclesManager.sol";
-import "./interfaces/ISignatureVerifier.sol";
+import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import { OraclesManager } from "./OraclesManager.sol";
+import { ISignatureVerifier } from "./interfaces/ISignatureVerifier.sol";
 
 /// @dev It's used to verify that a transfer is signed by oracles.
 contract SignatureVerifier is OraclesManager, ISignatureVerifier {
@@ -44,11 +44,13 @@ contract SignatureVerifier is OraclesManager, ISignatureVerifier {
 
         for (uint256 i = 0; i < length; ) {
             address signer = _getSigner(submissionId_, deadline_, signatures_[i]);
-            if (!_isValidOracle(signer)) revert NotValidOracle();
+            uint256 index = _indexOf(signer);
 
-            if (oracles[i] != address(0)) revert DuplicateSignatures();
+            if (!_isValidOracle(signer)) revert InvalidOracle();
 
-            oracles[i] = signer;
+            if (oracles[index] != address(0)) revert DuplicateSignatures();
+
+            oracles[index] = signer;
             unchecked {
                 ++i;
             }
