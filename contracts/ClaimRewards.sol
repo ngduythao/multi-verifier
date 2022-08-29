@@ -17,6 +17,7 @@ contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecov
     }
 
     function claim(
+        bytes32 claimId_,
         address[] calldata tokens_,
         uint256[] calldata amounts_,
         uint256 deadline_,
@@ -24,12 +25,12 @@ contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecov
     ) external nonReentrant {
         uint256 length = tokens_.length;
         address sender = _msgSender();
-        bytes32 submissionId = keccak256(abi.encodePacked(sender, tokens_, amounts_, deadline_));
+        bytes32 submissionId = keccak256(abi.encodePacked(claimId_, sender, tokens_, amounts_, deadline_));
 
         if (length != amounts_.length) revert LengthMismatch();
-        if (_hasClaimed[submissionId]) revert DoubleSpending();
+        if (_hasClaimed[claimId_]) revert DoubleSpending();
 
-        _hasClaimed[submissionId] = true;
+        _hasClaimed[claimId_] = true;
         _submit(submissionId, deadline_, signatures_);
 
         for (uint256 i = 0; i < length; ) {
@@ -44,7 +45,7 @@ contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecov
         emit Claim(sender, submissionId);
     }
 
-    function hasClaim(bytes32 submissionId_) external view returns (bool) {
-        return _hasClaimed[submissionId_];
+    function hasClaim(bytes32 claimId_) external view returns (bool) {
+        return _hasClaimed[claimId_];
     }
 }
