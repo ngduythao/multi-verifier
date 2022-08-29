@@ -20,6 +20,7 @@ contract TokenRecover is Ownable {
         address token_,
         uint256 amount_
     ) internal {
+        if (amount_ == 0) return;
         if (token_ == address(0)) {
             (bool success, ) = payable(account_).call{ value: amount_ }(new bytes(0));
             require(success, "TRANSFER_FAILED");
