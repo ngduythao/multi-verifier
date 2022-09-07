@@ -19,9 +19,9 @@ contract OraclesManager is Ownable, IOraclesManager {
      * @notice Constructor
      */
     constructor() {
-        _oracleAddresses.add(0x64470E5F5DD38e497194BbcAF8Daa7CA578926F6);
-        _oracleAddresses.add(0xf1684DaCa9FE469189A3202ae2dE25E80dcB90a1);
-        _oracleAddresses.add(0x14F791eb0bd5060a4C954D6719fE4e94859Eb614);
+        _oracleAddresses.add(0x8A7dee5370e2BB2F4105932f69E8B7946f532988);
+        _oracleAddresses.add(0x7f247AcFb53b348373843aF3aC6D003c0641bd21);
+        _oracleAddresses.add(0x3b2C170F06D6Efe0903B405C07637dDEDA264CE3);
         _threshHold = 3;
     }
 
@@ -46,7 +46,7 @@ contract OraclesManager is Ownable, IOraclesManager {
         emit AddOracles(oracles_);
     }
 
-    function removeOracles(address[] calldata oracles_) external onlyOwner {
+    function removeOracles(address[] calldata oracles_) external override onlyOwner {
         uint256 length = oracles_.length;
         for (uint256 i = 0; i < length; i++) {
             if (!_oracleAddresses.contains(oracles_[i])) revert OracleNotFound();

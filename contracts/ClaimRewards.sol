@@ -16,7 +16,7 @@ contract ClaimRewards is IClaimRewards, Affiliate, SignatureVerifier, TokenRecov
     receive() external payable {}
 
     constructor() {
-        _configAffiliate(0x64470E5F5DD38e497194BbcAF8Daa7CA578926F6, 300); // 3%
+        _configAffiliate(0x3e27432006d0Cd254B6CE77E4ff3e7B85C414863, 300); // 3%
     }
 
     function claim(
